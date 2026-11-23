@@ -1,0 +1,1302 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101828">
+  <title>Траектория — путь к олимпиаде</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #788397;
+      --primary: #6658e8;
+      --primary-light: #eeecff;
+      --border: #e8ebf2;
+      --green: #159b72;
+      --orange: #e99a39;
+      --red: #dc5c6b;
+      --shadow: 0 8px 28px rgba(25, 35, 65, .06);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: #101828;
+      color: white;
+      padding: 25px 17px;
+      position: fixed;
+      inset: 0 auto 0 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-size: 19px;
+      font-weight: 800;
+      padding: 4px 10px 30px;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: var(--primary);
+      font-size: 21px;
+    }
+
+    .nav-label {
+      color: #78849a;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 1.4px;
+      padding: 10px 12px;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 0;
+      border-radius: 11px;
+      background: transparent;
+      color: #aeb8c9;
+      text-align: left;
+      width: 100%;
+      margin: 3px 0;
+      transition: .2s;
+    }
+
+    .nav-btn:hover, .nav-btn.active {
+      background: #252e43;
+      color: white;
+    }
+
+    .nav-btn.active { box-shadow: inset 3px 0 var(--primary); }
+
+    .nav-icon { width: 22px; text-align: center; }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      padding: 15px 10px 5px;
+      color: #8793a8;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    main {
+      margin-left: 250px;
+      width: calc(100% - 250px);
+      padding: 30px 38px 60px;
+      max-width: 1700px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    h1 { font-size: 28px; margin: 0; letter-spacing: -.8px; }
+    h2 { font-size: 20px; margin: 0 0 17px; }
+    h3 { font-size: 16px; margin: 0 0 10px; }
+
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      padding: 7px 12px 7px 7px;
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      background: #e8e5ff;
+      color: var(--primary);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .hero {
+      background: linear-gradient(120deg, #24204f, #5143bb 65%, #7968ee);
+      color: white;
+      padding: 32px;
+      border-radius: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 25px;
+      margin-bottom: 22px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "✦";
+      position: absolute;
+      right: 12%;
+      top: -60px;
+      font-size: 230px;
+      color: rgba(255,255,255,.07);
+    }
+
+    .hero-content { max-width: 580px; position: relative; z-index: 1; }
+    .hero h2 { font-size: 29px; line-height: 1.2; margin: 10px 0; }
+    .hero p { color: #d9d5ff; line-height: 1.6; font-size: 14px; }
+
+    .hero-stat {
+      min-width: 150px;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 18px;
+      background: rgba(255,255,255,.12);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-stat strong { display: block; font-size: 35px; }
+    .hero-stat span { font-size: 12px; color: #dedbff; }
+
+    .btn {
+      border: 0;
+      padding: 11px 17px;
+      border-radius: 11px;
+      background: var(--primary);
+      color: white;
+      font-weight: 650;
+      font-size: 13px;
+      transition: .2s;
+    }
+
+    .btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+    .btn-light { background: white; color: var(--primary); }
+    .btn-outline { background: white; color: var(--text); border: 1px solid var(--border); }
+    .btn-danger { background: #fff0f1; color: var(--red); }
+    .btn-small { padding: 8px 12px; font-size: 12px; }
+
+    .grid { display: grid; gap: 17px; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 21px;
+      box-shadow: var(--shadow);
+      min-width: 0;
+    }
+
+    .stat-card { display: flex; align-items: center; gap: 14px; }
+    .stat-icon {
+      width: 47px;
+      height: 47px;
+      display: grid;
+      place-items: center;
+      background: var(--primary-light);
+      border-radius: 14px;
+      font-size: 21px;
+    }
+
+    .stat-value { font-size: 25px; font-weight: 800; }
+    .stat-label { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 28px 0 15px;
+    }
+
+    .section-head h2 { margin: 0; }
+
+    .muted { color: var(--muted); font-size: 13px; }
+    .small { font-size: 11px; color: var(--muted); }
+
+    .task {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .task:last-child { border-bottom: 0; }
+    .task input { width: 17px; height: 17px; accent-color: var(--primary); }
+    .task.done .task-title { text-decoration: line-through; color: #9aa3b2; }
+    .task-title { font-size: 13px; font-weight: 600; }
+    .task-date { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+    .progress {
+      height: 8px;
+      border-radius: 10px;
+      background: #eef0f5;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+
+    .progress > div {
+      height: 100%;
+      border-radius: inherit;
+      background: var(--primary);
+      transition: width .3s;
+    }
+
+    .tag {
+      display: inline-flex;
+      padding: 5px 9px;
+      border-radius: 7px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 10px;
+      font-weight: 700;
+      margin: 2px;
+    }
+
+    .tag.green { background: #e4f7ef; color: #13865f; }
+    .tag.orange { background: #fff3e3; color: #b87519; }
+    .tag.red { background: #fff0f1; color: #cc5363; }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 17px;
+    }
+
+    input, select {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 10px;
+      padding: 11px 13px;
+      color: var(--text);
+      outline: none;
+      min-width: 0;
+    }
+
+    input:focus, select:focus { border-color: var(--primary); }
+    .toolbar input { flex: 1; min-width: 180px; }
+
+    .olympiad-card { display: flex; flex-direction: column; gap: 12px; }
+    .olympiad-top { display: flex; justify-content: space-between; gap: 10px; }
+    .olympiad-icon {
+      width: 43px; height: 43px;
+      border-radius: 13px;
+      display: grid; place-items: center;
+      background: #f0efff; font-size: 21px;
+    }
+
+    .olympiad-card p { font-size: 12px; color: var(--muted); line-height: 1.5; margin: 0; }
+    .olympiad-meta { display: flex; flex-wrap: wrap; gap: 5px; }
+    .card-actions { display: flex; gap: 8px; margin-top: auto; }
+
+    .timeline { border-left: 2px solid #e8e5ff; margin-left: 9px; padding-left: 21px; }
+    .timeline-item { position: relative; padding: 0 0 22px; }
+    .timeline-item::before {
+      content: ""; position: absolute; left: -28px; top: 3px;
+      width: 11px; height: 11px; border-radius: 50%;
+      background: var(--primary); border: 3px solid #eeecff;
+    }
+
+    .timeline-item strong { font-size: 13px; }
+    .timeline-item p { margin: 5px 0; color: var(--muted); font-size: 12px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .field { display: flex; flex-direction: column; gap: 7px; }
+    .field label { font-size: 12px; font-weight: 650; }
+    .field input, .field select { width: 100%; }
+
+    .subject-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .subject-chip {
+      padding: 9px 13px; border: 1px solid var(--border);
+      background: white; border-radius: 10px; font-size: 12px;
+    }
+    .subject-chip.selected { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+
+    .empty {
+      text-align: center; padding: 35px 15px; color: var(--muted);
+      font-size: 13px; background: white; border-radius: 15px;
+      border: 1px dashed var(--border);
+    }
+
+    .modal-backdrop {
+      display: none; position: fixed; inset: 0;
+      background: rgba(10,15,30,.5); z-index: 30;
+      align-items: center; justify-content: center; padding: 18px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      width: 100%; max-width: 530px; max-height: 90vh;
+      overflow-y: auto; background: white; border-radius: 20px;
+      padding: 25px; box-shadow: 0 20px 80px #10182840;
+    }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .close { border: 0; background: #f1f2f6; width: 32px; height: 32px; border-radius: 50%; }
+
+    .toast {
+      position: fixed; bottom: 25px; right: 25px;
+      background: #172033; color: white; padding: 13px 18px;
+      border-radius: 12px; z-index: 50; font-size: 13px;
+      opacity: 0; transform: translateY(10px); transition: .25s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    .chat-box {
+      height: 300px; overflow-y: auto; padding: 12px;
+      background: #f7f8fc; border-radius: 13px; margin-bottom: 12px;
+    }
+    .message {
+      max-width: 85%; padding: 11px 13px; border-radius: 13px;
+      margin: 8px 0; font-size: 12px; line-height: 1.5;
+      background: white;
+    }
+    .message.user { margin-left: auto; background: var(--primary); color: white; }
+
+    .mobile-menu { display: none; }
+
+    @media(max-width: 1050px) {
+      main { padding: 25px 22px; }
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media(max-width: 700px) {
+      .sidebar { width: 250px; transform: translateX(-100%); transition: .25s; }
+      .sidebar.open { transform: translateX(0); }
+      main { margin-left: 0; width: 100%; padding: 18px 14px 45px; }
+      .mobile-menu { display: inline-flex; }
+      h1 { font-size: 22px; }
+      .hero { padding: 23px; flex-direction: column; align-items: flex-start; }
+      .hero h2 { font-size: 23px; }
+      .hero-stat { width: 100%; }
+      .grid-2, .grid-3, .grid-4, .form-grid { grid-template-columns: 1fr; }
+      .topbar { align-items: flex-start; }
+      .user span:last-child { display: none; }
+      .section-head { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-icon">✦</div>
+      <span>траектория</span>
+    </div>
+
+    <div class="nav-label">Рабочее пространство</div>
+    <button class="nav-btn active" data-page="home"><span class="nav-icon">⌂</span>Главная</button>
+    <button class="nav-btn" data-page="plan"><span class="nav-icon">◈</span>Моя траектория</button>
+    <button class="nav-btn" data-page="catalog"><span class="nav-icon">▦</span>Олимпиады</button>
+    <button class="nav-btn" data-page="calendar"><span class="nav-icon">▣</span>Календарь</button>
+    <button class="nav-btn" data-page="achievements"><span class="nav-icon">★</span>Достижения</button>
+
+    <div class="nav-label" style="margin-top:15px">Дополнительно</div>
+    <button class="nav-btn" data-page="universities"><span class="nav-icon">⌂</span>Вузы и льготы</button>
+    <button class="nav-btn" data-page="assistant"><span class="nav-icon">✧</span>AI-консультант</button>
+    <button class="nav-btn" data-page="parent"><span class="nav-icon">♧</span>Родителям</button>
+    <button class="nav-btn" data-page="profile"><span class="nav-icon">⚙</span>Мой профиль</button>
+
+    <div class="sidebar-bottom">
+      Траектория в олимпиаду<br>
+      Твой путь к большим возможностям
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <div>
+        <button class="btn btn-outline mobile-menu" id="menuToggle">☰</button>
+        <div class="eyebrow">ЛИЧНЫЙ КАБИНЕТ УЧЕНИКА</div>
+        <h1 id="pageTitle">Главная</h1>
+      </div>
+      <div class="user">
+        <div class="avatar" id="avatar">У</div>
+        <span id="userName">Ученик</span>
+        <span>⌄</span>
+      </div>
+    </header>
+
+    <!-- ГЛАВНАЯ -->
+    <section class="page active" id="page-home">
+      <div class="hero">
+        <div class="hero-content">
+          <span class="tag" style="background:#ffffff25;color:white">ТВОЙ ПЕРСОНАЛЬНЫЙ ПЛАН</span>
+          <h2>Большие цели начинаются с маленьких шагов</h2>
+          <p id="homeGreeting">Подготовься к олимпиадам, найди подходящие возможности и построй собственную образовательную траекторию.</p>
+          <button class="btn btn-light" onclick="navigate('plan')">Посмотреть траекторию →</button>
+        </div>
+        <div class="hero-stat">
+          <strong id="homeProgress">0%</strong>
+          <span>выполнение плана</span>
+        </div>
+      </div>
+
+      <div class="grid grid-4">
+        <div class="card stat-card">
+          <div class="stat-icon">🏆</div>
+          <div><div class="stat-value" id="homeOlympiads">0</div><div class="stat-label">подходящих олимпиад</div></div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-icon">📚</div>
+          <div><div class="stat-value" id="homeTasks">0</div><div class="stat-label">задач в плане</div></div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-icon">⭐</div>
+          <div><div class="stat-value" id="homeAchievements">0</div><div class="stat-label">достижений</div></div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-icon">🎯</div>
+          <div><div class="stat-value" id="homeSubjects">0</div><div class="stat-label">предметов подготовки</div></div>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="margin-top:20px">
+        <div class="card">
+          <div class="section-head" style="margin-top:0">
+            <h2>Ближайшие задачи</h2>
+            <button class="btn btn-outline btn-small" onclick="navigate('plan')">Все задачи</button>
+          </div>
+          <div id="homeTaskList"></div>
+        </div>
+        <div class="card">
+          <div class="section-head" style="margin-top:0">
+            <h2>Твоя цель</h2>
+            <span class="tag green">В фокусе</span>
+          </div>
+          <h3 id="homeGoal">Победа в олимпиаде</h3>
+          <p class="muted" id="homeProfile">Заполни профиль, чтобы получить персональные рекомендации.</p>
+          <div class="progress"><div id="homeGoalProgress" style="width:0%"></div></div>
+          <button class="btn btn-outline btn-small" onclick="navigate('profile')">Настроить профиль</button>
+          <hr style="border:0;border-top:1px solid var(--border);margin:20px 0">
+          <h3>Что даст победа?</h3>
+          <p class="muted">Победа или призовое место в олимпиаде может дать право на особые условия поступления. Конкретные льготы зависят от олимпиады, уровня, профиля и правил приёма вуза.</p>
+          <button class="btn btn-small" onclick="navigate('universities')">Изучить льготы →</button>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <h2>Рекомендуемые олимпиады</h2>
+        <button class="btn btn-outline btn-small" onclick="navigate('catalog')">Весь каталог →</button>
+      </div>
+      <div class="grid grid-3" id="homeOlympiadList"></div>
+    </section>
+
+    <!-- ТРАЕКТОРИЯ -->
+    <section class="page" id="page-plan">
+      <div class="hero">
+        <div class="hero-content">
+          <span class="tag" style="background:#ffffff25;color:white">ТВОЙ МАРШРУТ</span>
+          <h2>Персональная траектория подготовки</h2>
+          <p>План помогает двигаться к цели последовательно: от выбора олимпиад до подготовки и участия.</p>
+          <button class="btn btn-light" onclick="generatePlan()">✦ Сгенерировать план</button>
+        </div>
+        <div class="hero-stat">
+          <strong id="planPercent">0%</strong>
+          <span>выполнено задач</span>
+        </div>
+      </div>
+      <div class="grid grid-3">
+        <div class="card"><div class="stat-value" id="planTotal">0</div><div class="stat-label">всего задач</div></div>
+        <div class="card"><div class="stat-value" id="planCompleted">0</div><div class="stat-label">выполнено</div></div>
+        <div class="card"><div class="stat-value" id="planRemaining">0</div><div class="stat-label">осталось</div></div>
+      </div>
+      <div class="section-head"><h2>Этапы подготовки</h2></div>
+      <div class="card" id="planList"></div>
+    </section>
+
+    <!-- КАТАЛОГ -->
+    <section class="page" id="page-catalog">
+      <div class="card" style="margin-bottom:20px">
+        <h2>Найди свою олимпиаду</h2>
+        <p class="muted">Подбери соревнования по предмету, классу и интересам.</p>
+        <div class="toolbar">
+          <input id="searchOlympiad" placeholder="Поиск по названию или предмету...">
+          <select id="filterSubject">
+            <option value="">Все предметы</option>
+            <option>Математика</option><option>Информатика</option>
+            <option>Физика</option><option>Русский язык</option>
+            <option>Обществознание</option><option>Биология</option>
+            <option>Химия</option><option>История</option>
+          </select>
+          <select id="filterLevel">
+            <option value="">Все уровни</option>
+            <option value="1">Уровень 1</option>
+            <option value="2">Уровень 2</option>
+            <option value="3">Уровень 3</option>
+          </select>
+        </div>
+      </div>
+      <div class="section-head">
+        <h2>Каталог олимпиад</h2>
+        <span class="muted" id="catalogCount"></span>
+      </div>
+      <div class="grid grid-3" id="catalogList"></div>
+    </section>
+
+    <!-- КАЛЕНДАРЬ -->
+    <section class="page" id="page-calendar">
+      <div class="section-head" style="margin-top:0">
+        <div><h2>Календарь подготовки</h2><p class="muted">Следи за сроками и важными событиями.</p></div>
+        <button class="btn" onclick="openReminderModal()">+ Добавить событие</button>
+      </div>
+      <div class="grid grid-2">
+        <div class="card">
+          <h2>Мои события</h2>
+          <div id="calendarList"></div>
+        </div>
+        <div class="card">
+          <h2>Добавить напоминание</h2>
+          <div class="field" style="margin-bottom:12px">
+            <label>Название события</label>
+            <input id="reminderName" placeholder="Например, отборочный этап">
+          </div>
+          <div class="field" style="margin-bottom:12px">
+            <label>Дата</label>
+            <input type="date" id="reminderDate">
+          </div>
+          <div class="field" style="margin-bottom:15px">
+            <label>Тип события</label>
+            <select id="reminderType">
+              <option>Дедлайн</option><option>Подготовка</option>
+              <option>Олимпиада</option><option>Другое</option>
+            </select>
+          </div>
+          <button class="btn" onclick="addReminder()">Сохранить событие</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ДОСТИЖЕНИЯ -->
+    <section class="page" id="page-achievements">
+      <div class="hero">
+        <div class="hero-content">
+          <h2>Каждый результат — шаг вперёд</h2>
+          <p>Собирай свои достижения, отслеживай прогресс и фиксируй результаты олимпиад.</p>
+          <button class="btn btn-light" onclick="openAchievementModal()">+ Добавить достижение</button>
+        </div>
+        <div class="hero-stat"><strong id="achievementBig">0</strong><span>достижений</span></div>
+      </div>
+      <div class="grid grid-3">
+        <div class="card"><div class="stat-value" id="achTotal">0</div><div class="stat-label">всего результатов</div></div>
+        <div class="card"><div class="stat-value" id="achWinners">0</div><div class="stat-label">побед и призовых мест</div></div>
+        <div class="card"><div class="stat-value" id="achSubjects">0</div><div class="stat-label">предметов</div></div>
+      </div>
+      <div class="section-head"><h2>Мои достижения</h2></div>
+      <div class="card" id="achievementList"></div>
+    </section>
+
+    <!-- ВУЗЫ -->
+    <section class="page" id="page-universities">
+      <div class="hero">
+        <div class="hero-content">
+          <h2>Олимпиада как путь в университет</h2>
+          <p>Изучи, какие возможности могут давать олимпиады при поступлении.</p>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:18px">
+        <h2>Что может дать диплом олимпиады?</h2>
+        <div class="grid grid-3">
+          <div><div class="stat-icon">🎓</div><h3>БВИ</h3><p class="muted">Возможность поступления без вступительных испытаний при соблюдении условий.</p></div>
+          <div><div class="stat-icon">💯</div><h3>100 баллов</h3><p class="muted">Возможность получить 100 баллов за профильный предмет ЕГЭ.</p></div>
+          <div><div class="stat-icon">➕</div><h3>Дополнительные баллы</h3><p class="muted">Дополнительные баллы к индивидуальным достижениям, если это предусмотрено вузом.</p></div>
+        </div>
+      </div>
+      <div class="section-head"><h2>Вузы и возможности</h2><button class="btn btn-small" onclick="openUniversityModal()">+ Добавить вуз</button></div>
+      <div class="grid grid-2" id="universityList"></div>
+      <p class="small" style="margin-top:15px">Важно: информация в демонстрационных карточках не является официальным подтверждением льгот. Проверяй правила приёма, перечни олимпиад и требования к ЕГЭ на сайтах вузов за нужный год.</p>
+    </section>
+
+    <!-- AI -->
+    <section class="page" id="page-assistant">
+      <div class="grid grid-2">
+        <div class="card">
+          <h2>✧ AI-консультант</h2>
+          <p class="muted">Задай вопрос о подготовке, выборе олимпиады или планировании.</p>
+          <div class="chat-box" id="chatMessages">
+            <div class="message">Привет! Я демонстрационный помощник проекта «Траектория». Могу подсказать, как организовать подготовку и выбрать следующий шаг. Чем помочь?</div>
+          </div>
+          <div class="toolbar" style="margin:0">
+            <input id="chatInput" placeholder="Напиши свой вопрос...">
+            <button class="btn" onclick="sendMessage()">Отправить</button>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Популярные вопросы</h2>
+          <div class="task"><span>💡</span><div><div class="task-title">С чего начать подготовку?</div><div class="task-date">Выбор предмета и уровня</div></div></div>
+          <div class="task"><span>🏆</span><div><div class="task-title">Как выбрать олимпиаду?</div><div class="task-date">Оценка интересов и целей</div></div></div>
+          <div class="task"><span>📅</span><div><div class="task-title">Как составить расписание?</div><div class="task-date">Планирование занятий</div></div></div>
+          <div class="task"><span>🎓</span><div><div class="task-title">Какие льготы бывают?</div><div class="task-date">Условия поступления в вузы</div></div></div>
+          <p class="small">Это локальная демонстрация, а не подключённая языковая модель. Для настоящего AI-консультанта потребуется серверная часть и подключение модели с базой проверенных источников.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- РОДИТЕЛИ -->
+    <section class="page" id="page-parent">
+      <div class="hero">
+        <div class="hero-content">
+          <h2>Родители — партнёры на пути к цели</h2>
+          <p>Следите за прогрессом, помогайте планировать нагрузку и поддерживайте ученика.</p>
+        </div>
+      </div>
+      <div class="grid grid-3">
+        <div class="card"><div class="stat-value" id="parentProgress">0%</div><div class="stat-label">выполнение плана</div></div>
+        <div class="card"><div class="stat-value" id="parentTasks">0</div><div class="stat-label">задач выполнено</div></div>
+        <div class="card"><div class="stat-value" id="parentAchievements">0</div><div class="stat-label">достижений</div></div>
+      </div>
+      <div class="grid grid-2" style="margin-top:18px">
+        <div class="card"><h2>Текущая цель</h2><h3 id="parentGoal">Не выбрана</h3><p class="muted" id="parentProfile">Заполните профиль ученика.</p></div>
+        <div class="card"><h2>Рекомендации родителям</h2>
+          <div class="task"><span>💬</span><div class="task-title">Обсуждайте цели, а не только результаты.</div></div>
+          <div class="task"><span>🌿</span><div class="task-title">Оставляйте время на отдых и восстановление.</div></div>
+          <div class="task"><span>📌</span><div class="task-title">Помогайте следить за сроками регистрации.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ПРОФИЛЬ -->
+    <section class="page" id="page-profile">
+      <div class="card">
+        <h2>Мой образовательный профиль</h2>
+        <p class="muted">Расскажи о себе — это поможет подобрать подходящие олимпиады и план подготовки.</p>
+        <div class="form-grid">
+          <div class="field"><label>Имя</label><input id="profileName" placeholder="Как к тебе обращаться?"></div>
+          <div class="field"><label>Класс</label>
+            <select id="profileGrade">
+              <option value="">Выбери класс</option>
+              <option>7</option><option>8</option><option>9</option>
+              <option>10</option><option>11</option>
+            </select>
+          </div>
+          <div class="field"><label>Регион</label><input id="profileRegion" placeholder="Например, Москва"></div>
+          <div class="field"><label>Цель</label>
+            <select id="profileGoal">
+              <option value="Победа в олимпиаде">Победа в олимпиаде</option>
+              <option value="Призовое место">Призовое место</option>
+              <option value="Подготовка к поступлению">Подготовка к поступлению</option>
+              <option value="Развитие знаний">Развитие знаний</option>
+            </select>
+          </div>
+          <div class="field"><label>Желаемый вуз</label><input id="profileUniversity" placeholder="Например, МГУ"></div>
+          <div class="field"><label>Направление</label><input id="profileDirection" placeholder="Например, прикладная математика"></div>
+        </div>
+        <div class="section-head"><h2>Интересующие предметы</h2></div>
+        <div class="subject-list" id="subjectChoices">
+          <button class="subject-chip" data-subject="Математика">Математика</button>
+          <button class="subject-chip" data-subject="Информатика">Информатика</button>
+          <button class="subject-chip" data-subject="Физика">Физика</button>
+          <button class="subject-chip" data-subject="Русский язык">Русский язык</button>
+          <button class="subject-chip" data-subject="Обществознание">Обществознание</button>
+          <button class="subject-chip" data-subject="Биология">Биология</button>
+          <button class="subject-chip" data-subject="Химия">Химия</button>
+          <button class="subject-chip" data-subject="История">История</button>
+        </div>
+        <div style="margin-top:22px">
+          <button class="btn" onclick="saveProfile()">Сохранить профиль</button>
+          <button class="btn btn-outline" onclick="resetProfile()">Сбросить</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- МОДАЛЬНЫЕ ОКНА -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-head"><h2 id="modalTitle">Добавить</h2><button class="close" onclick="closeModal()">✕</button></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* ДЕМОНСТРАЦИОННЫЕ ДАННЫЕ */
+const olympiads = [
+  {id:1,name:"Всероссийская олимпиада школьников",subject:"Математика",level:1,icon:"🏆",classes:"7–11 классы",description:"Многопредметная олимпиада с муниципальным, региональным и заключительным этапами.",season:"Обычно учебный год",type:"Государственная"},
+  {id:2,name:"Олимпиада «Физтех»",subject:"Физика",level:1,icon:"⚛️",classes:"9–11 классы",description:"Олимпиада по физике и математике для школьников.",season:"Уточнять по сезону",type:"Вузовская"},
+  {id:3,name:"Олимпиада «Ломоносов»",subject:"Математика",level:1,icon:"🎓",classes:"10–11 классы",description:"Интеллектуальное соревнование по разным направлениям.",season:"Уточнять по сезону",type:"Вузовская"},
+  {id:4,name:"Высшая проба",subject:"Обществознание",level:1,icon:"📚",classes:"7–11 классы",description:"Олимпиада по широкому перечню школьных дисциплин.",season:"Уточнять по сезону",type:"Вузовская"},
+  {id:5,name:"Олимпиада по информатике",subject:"Информатика",level:2,icon:"💻",classes:"8–11 классы",description:"Задачи на алгоритмическое мышление и программирование.",season:"Уточнять по сезону",type:"Предметная"},
+  {id:6,name:"Олимпиада по биологии",subject:"Биология",level:2,icon:"🧬",classes:"9–11 классы",description:"Проверка знаний по биологии и естественным наукам.",season:"Уточнять по сезону",type:"Предметная"},
+  {id:7,name:"Олимпиада по химии",subject:"Химия",level:2,icon:"🧪",classes:"8–11 классы",description:"Теоретические и практические задания по химии.",season:"Уточнять по сезону",type:"Предметная"},
+  {id:8,name:"Олимпиада по истории",subject:"История",level:3,icon:"🏛️",classes:"9–11 классы",description:"Работа с историческими источниками и фактами.",season:"Уточнять по сезону",type:"Предметная"},
+  {id:9,name:"Олимпиада по русскому языку",subject:"Русский язык",level:2,icon:"✍️",classes:"8–11 классы",description:"Задания по языку, культуре речи и лингвистике.",season:"Уточнять по сезону",type:"Предметная"},
+  {id:10,name:"Олимпиада по физике",subject:"Физика",level:3,icon:"🔭",classes:"7–11 классы",description:"Задачи по основным разделам физики.",season:"Уточнять по сезону",type:"Предметная"}
+];
+
+const defaultTasks = [
+  {id:101,title:"Определить основные предметы подготовки",date:"Этап 1 · Старт",done:false},
+  {id:102,title:"Изучить подходящие олимпиады",date:"Этап 1 · Старт",done:false},
+  {id:103,title:"Составить расписание занятий",date:"Этап 2 · Планирование",done:false},
+  {id:104,title:"Повторить ключевые темы предмета",date:"Этап 2 · Подготовка",done:false},
+  {id:105,title:"Решить задания прошлых лет",date:"Этап 3 · Практика",done:false},
+  {id:106,title:"Проверить сроки регистрации",date:"Этап 3 · Участие",done:false},
+  {id:107,title:"Принять участие в олимпиаде",date:"Этап 4 · Результат",done:false}
+];
+
+const defaultUniversities = [
+  {name:"МГУ имени М. В. Ломоносова",direction:"Разные направления",benefit:"Условия БВИ и других льгот определяются правилами приёма и перечнями олимпиад конкретного года."},
+  {name:"НИУ ВШЭ",direction:"Экономика, математика, IT и другие",benefit:"Возможны особые права и дополнительные баллы в соответствии с правилами приёма."},
+  {name:"МФТИ",direction:"Физика, математика, IT",benefit:"Условия учёта олимпиад зависят от профиля, уровня и требований университета."},
+  {name:"ИТМО",direction:"Информатика, инженерия, технологии",benefit:"Возможны особые условия для победителей и призёров отдельных олимпиад."}
+];
+
+/* СОСТОЯНИЕ И ЛОКАЛЬНОЕ ХРАНИЛИЩЕ */
+const initialState = {
+  profile:{name:"",grade:"",region:"",goal:"Победа в олимпиаде",university:"",direction:"",subjects:[]},
+  tasks:defaultTasks,
+  reminders:[],
+  achievements:[],
+  universities:defaultUniversities,
+  favorites:[],
+  chat:[]
+};
+
+function loadState(){
+  try {
+    const saved=localStorage.getItem("trajectoryApp");
+    if(!saved) return structuredClone(initialState);
+    const data=JSON.parse(saved);
+    return {
+      ...structuredClone(initialState),
+      ...data,
+      profile:{...initialState.profile,...(data.profile||{})},
+      tasks:Array.isArray(data.tasks)?data.tasks:structuredClone(defaultTasks),
+      reminders:Array.isArray(data.reminders)?data.reminders:[],
+      achievements:Array.isArray(data.achievements)?data.achievements:[],
+      universities:Array.isArray(data.universities)?data.universities:structuredClone(defaultUniversities),
+      favorites:Array.isArray(data.favorites)?data.favorites:[],
+      chat:Array.isArray(data.chat)?data.chat:[]
+    };
+  } catch(error) {
+    console.warn("Не удалось загрузить данные",error);
+    return structuredClone(initialState);
+  }
+}
+
+let state=loadState();
+
+function saveState(){
+  try {
+    localStorage.setItem("trajectoryApp",JSON.stringify(state));
+  } catch(error) {
+    console.warn("Не удалось сохранить данные",error);
+    toast("Не удалось сохранить данные в браузере");
+  }
+}
+
+function escapeHTML(value){
+  return String(value??"").replace(/[&<>"']/g,char=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[char]));
+}
+
+function toast(message){
+  const el=document.getElementById("toast");
+  el.textContent=message;
+  el.classList.add("show");
+  clearTimeout(toast.timer);
+  toast.timer=setTimeout(()=>el.classList.remove("show"),2500);
+}
+
+function navigate(page){
+  document.querySelectorAll(".page").forEach(el=>el.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(el=>el.classList.toggle("active",el.dataset.page===page));
+  const target=document.getElementById("page-"+page);
+  if(!target) return;
+  target.classList.add("active");
+  const labels={
+    home:"Главная",plan:"Моя траектория",catalog:"Олимпиады",
+    calendar:"Календарь",achievements:"Достижения",
+    universities:"Вузы и льготы",assistant:"AI-консультант",
+    parent:"Родителям",profile:"Мой профиль"
+  };
+  document.getElementById("pageTitle").textContent=labels[page]||"Траектория";
+  document.getElementById("sidebar").classList.remove("open");
+  renderAll();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.querySelectorAll(".nav-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>navigate(btn.dataset.page));
+});
+document.getElementById("menuToggle").addEventListener("click",()=>{
+  document.getElementById("sidebar").classList.toggle("open");
+});
+
+/* ПРОФИЛЬ */
+function selectedSubjects(){
+  return Array.from(document.querySelectorAll(".subject-chip.selected")).map(el=>el.dataset.subject);
+}
+
+document.querySelectorAll(".subject-chip").forEach(btn=>{
+  btn.addEventListener("click",()=>btn.classList.toggle("selected"));
+});
+
+function saveProfile(){
+  state.profile={
+    name:document.getElementById("profileName").value.trim(),
+    grade:document.getElementById("profileGrade").value,
+    region:document.getElementById("profileRegion").value.trim(),
+    goal:document.getElementById("profileGoal").value,
+    university:document.getElementById("profileUniversity").value.trim(),
+    direction:document.getElementById("profileDirection").value.trim(),
+    subjects:selectedSubjects()
+  };
+  saveState();
+  renderAll();
+  toast("Профиль сохранён!");
+}
+
+function fillProfile(){
+  const p=state.profile;
+  document.getElementById("profileName").value=p.name||"";
+  document.getElementById("profileGrade").value=p.grade||"";
+  document.getElementById("profileRegion").value=p.region||"";
+  document.getElementById("profileGoal").value=p.goal||"Победа в олимпиаде";
+  document.getElementById("profileUniversity").value=p.university||"";
+  document.getElementById("profileDirection").value=p.direction||"";
+  document.querySelectorAll(".subject-chip").forEach(btn=>{
+    btn.classList.toggle("selected",(p.subjects||[]).includes(btn.dataset.subject));
+  });
+}
+
+function resetProfile(){
+  if(!confirm("Сбросить профиль?")) return;
+  state.profile=structuredClone(initialState.profile);
+  saveState();fillProfile();renderAll();toast("Профиль сброшен");
+}
+
+/* ПЛАН */
+function progress(){
+  const total=state.tasks.length;
+  const completed=state.tasks.filter(t=>t.done).length;
+  return {total,completed,remaining:total-completed,percent:total?Math.round(completed/total*100):0};
+}
+
+function generatePlan(){
+  const subjects=state.profile.subjects;
+  if(!subjects.length){
+    toast("Сначала выбери предметы в профиле");
+    navigate("profile");
+    return;
+  }
+
+  const generated=[
+    "Составить список олимпиад по предмету: "+subjects.join(", "),
+    "Изучить требования и форматы заданий",
+    "Проверить базовые знания по выбранному предмету",
+    "Составить недельное расписание подготовки",
+    "Решить тренировочные задания",
+    "Разобрать ошибки и сложные темы",
+    "Проверить даты регистрации и этапов"
+  ];
+
+  state.tasks=generated.map((title,index)=>({
+    id:Date.now()+index,
+    title,
+    date:["Старт","Выбор соревнований","Диагностика","Планирование","Практика","Работа над ошибками","Участие"][index],
+    done:false
+  }));
+  saveState();renderAll();toast("Персональный план создан!");
+}
+
+function toggleTask(id,done){
+  const task=state.tasks.find(t=>t.id===id);
+  if(!task)return;
+  task.done=done;
+  saveState();renderAll();
+}
+
+function renderPlan(){
+  const p=progress();
+  document.getElementById("planPercent").textContent=p.percent+"%";
+  document.getElementById("planTotal").textContent=p.total;
+  document.getElementById("planCompleted").textContent=p.completed;
+  document.getElementById("planRemaining").textContent=p.remaining;
+
+  const grouped={};
+  state.tasks.forEach(task=>{
+    (grouped[task.date]??=[]).push(task);
+  });
+
+  document.getElementById("planList").innerHTML=Object.entries(grouped).map(([stage,tasks])=>`
+    <div style="margin-bottom:22px">
+      <h3>${escapeHTML(stage)}</h3>
+      ${tasks.map(task=>`
+        <label class="task ${task.done?"done":""}">
+          <input type="checkbox" ${task.done?"checked":""}
+            onchange="toggleTask(${Number(task.id)},this.checked)">
+          <span class="task-title">${escapeHTML(task.title)}</span>
+          ${task.done?'<span class="tag green">Готово</span>':""}
+        </label>`).join("")}
+    </div>`).join("")||'<div class="empty">План пока пуст. Нажми «Сгенерировать план».</div>';
+}
+
+/* ОЛИМПИАДЫ */
+function olympiadCard(item){
+  const favorite=state.favorites.includes(item.id);
+  return `
+    <div class="card olympiad-card">
+      <div class="olympiad-top">
+        <div class="olympiad-icon">${item.icon}</div>
+        <button class="btn btn-outline btn-small" title="В избранное"
+          onclick="toggleFavorite(${item.id})">${favorite?"★":"☆"}</button>
+      </div>
+      <div>
+        <h3>${escapeHTML(item.name)}</h3>
+        <p>${escapeHTML(item.description)}</p>
+      </div>
+      <div class="olympiad-meta">
+        <span class="tag">${escapeHTML(item.subject)}</span>
+        <span class="tag orange">Уровень ${item.level}</span>
+        <span class="tag green">${escapeHTML(item.classes)}</span>
+      </div>
+      <div class="small">${escapeHTML(item.season)}</div>
+      <div class="card-actions">
+        <button class="btn btn-small" onclick="addOlympiadTask(${item.id})">В мой план</button>
+        <button class="btn btn-outline btn-small" onclick="showOlympiad(${item.id})">Подробнее</button>
+      </div>
+    </div>`;
+}
+
+function renderCatalog(){
+  const query=document.getElementById("searchOlympiad").value.toLowerCase().trim();
+  const subject=document.getElementById("filterSubject").value;
+  const level=document.getElementById("filterLevel").value;
+
+  const filtered=olympiads.filter(item=>{
+    const matchesQuery=(item.name+" "+item.subject+" "+item.description).toLowerCase().includes(query);
+    return matchesQuery&&(!subject||item.subject===subject)&&(!level||String(item.level)===level);
+  });
+
+  document.getElementById("catalogCount").textContent=filtered.length+" найдено";
+  document.getElementById("catalogList").innerHTML=filtered.map(olympiadCard).join("")||
+    '<div class="empty" style="grid-column:1/-1">Ничего не найдено. Попробуй изменить фильтры.</div>';
+}
+
+function toggleFavorite(id){
+  state.favorites=state.favorites.includes(id)
+    ?state.favorites.filter(x=>x!==id):[...state.favorites,id];
+  saveState();renderCatalog();renderHomeOlympiads();
+}
+
+function addOlympiadTask(id){
+  const item=olympiads.find(x=>x.id===id);
+  if(!item)return;
+  state.tasks.push({
+    id:Date.now(),title:"Подготовиться к олимпиаде: "+item.name,
+    date:"Дополнительная подготовка",done:false
+  });
+  saveState();renderAll();toast("Олимпиада добавлена в план");
+}
+
+function showOlympiad(id){
+  const item=olympiads.find(x=>x.id===id);
+  if(!item)return;
+  openModal(item.name,`
+    <div class="olympiad-icon">${item.icon}</div>
+    <p>${escapeHTML(item.description)}</p>
+    <p><b>Предмет:</b> ${escapeHTML(item.subject)}</p>
+    <p><b>Классы:</b> ${escapeHTML(item.classes)}</p>
+    <p><b>Уровень:</b> ${item.level}</p>
+    <p><b>Сезон:</b> ${escapeHTML(item.season)}</p>
+    <p class="small">Демонстрационная карточка. Перед регистрацией проверь официальный сайт организатора, актуальный календарь и правила участия.</p>
+    <button class="btn" onclick="addOlympiadTask(${item.id});closeModal()">Добавить в план</button>
+  `);
+}
+
+document.getElementById("searchOlympiad").addEventListener("input",renderCatalog);
+document.getElementById("filterSubject").addEventListener("change",renderCatalog);
+document.getElementById("filterLevel").addEventListener("change",renderCatalog);
+
+/* ГЛАВНАЯ */
+function renderHomeOlympiads(){
+  let list=olympiads;
+  if(state.profile.subjects.length){
+    const matching=list.filter(o=>state.profile.subjects.includes(o.subject));
+    if(matching.length)list=matching;
+  }
+  document.getElementById("homeOlympiadList").innerHTML=list.slice(0,3).map(olympiadCard).join("");
+}
+
+function renderHome(){
+  const p=progress();
+  document.getElementById("homeProgress").textContent=p.percent+"%";
+  document.getElementById("homeOlympiads").textContent=olympiads.length;
+  document.getElementById("homeTasks").textContent=p.total;
+  document.getElementById("homeAchievements").textContent=state.achievements.length;
+  document.getElementById("homeSubjects").textContent=state.profile.subjects.length;
+  document.getElementById("homeGoalProgress").style.width=p.percent+"%";
+  document.getElementById("homeGoal").textContent=state.profile.goal||"Победа в олимпиаде";
+  document.getElementById("homeProfile").textContent=
+    [state.profile.grade?state.profile.grade+" класс":null,state.profile.region,state.profile.university]
+      .filter(Boolean).join(" · ")||"Заполни профиль, чтобы получить персональные рекомендации.";
+  document.getElementById("homeGreeting").textContent=state.profile.name
+    ?`Привет, ${state.profile.name}! Продолжай двигаться к своей цели — каждый шаг имеет значение.`
+    :"Подготовься к олимпиадам, найди подходящие возможности и построй собственную образовательную траекторию.";
+
+  const pending=state.tasks.filter(t=>!t.done).slice(0,4);
+  document.getElementById("homeTaskList").innerHTML=pending.map(t=>`
+    <label class="task">
+      <input type="checkbox" onchange="toggleTask(${Number(t.id)},this.checked)">
+      <div><div class="task-title">${escapeHTML(t.title)}</div><div class="task-date">${escapeHTML(t.date)}</div></div>
+    </label>`).join("")||'<div class="empty">Все задачи выполнены. Отличная работа!</div>';
+}
+
+/* КАЛЕНДАРЬ */
+function openReminderModal(){
+  navigate("calendar");
+  document.getElementById("reminderName").focus();
+}
+
+function addReminder(){
+  const name=document.getElementById("reminderName").value.trim();
+  const date=document.getElementById("reminderDate").value;
+  const type=document.getElementById("reminderType").value;
+  if(!name||!date){toast("Заполни название и дату");return;}
+  state.reminders.push({id:Date.now(),name,date,type});
+  state.reminders.sort((a,b)=>a.date.localeCompare(b.date));
+  saveState();renderCalendar();
+  document.getElementById("reminderName").value="";
+  document.getElementById("reminderDate").value="";
+  toast("Событие добавлено");
+}
+
+function deleteReminder(id){
+  state.reminders=state.reminders.filter(x=>x.id!==id);
+  saveState();renderCalendar();toast("Событие удалено");
+}
+
+function renderCalendar(){
+  const list=[...state.reminders].sort((a,b)=>a.date.localeCompare(b.date));
+  document.getElementById("calendarList").innerHTML=list.map(item=>`
+    <div class="task">
+      <div class="stat-icon">📅</div>
+      <div style="flex:1">
+        <div class="task-title">${escapeHTML(item.name)}</div>
+        <div class="task-date">${escapeHTML(item.date)} · ${escapeHTML(item.type)}</div>
+      </div>
+      <button class="btn btn-danger btn-small" onclick="deleteReminder(${Number(item.id)})">Удалить</button>
+    </div>`).join("")||'<div class="empty">Событий пока нет. Добавь первое напоминание.</div>';
+}
+
+/* ДОСТИЖЕНИЯ */
+function openAchievementModal(){
+  openModal("Добавить достижение",`
+    <div class="field" style="margin-bottom:12px"><label>Название олимпиады</label><input id="achName" placeholder="Название"></div>
+    <div class="field" style="margin-bottom:12px"><label>Результат</label>
+      <select id="achResult"><option>Участник</option><option>Призёр</option><option>Победитель</option></select>
+    </div>
+    <div class="field" style="margin-bottom:12px"><label>Предмет</label><input id="achSubject" placeholder="Предмет"></div>
+    <div class="field" style="margin-bottom:18px"><label>Год</label><input id="achYear" type="number" min="2000" max="2100" value="${new Date().getFullYear()}"></div>
+    <button class="btn" onclick="saveAchievement()">Сохранить достижение</button>
+  `);
+}
+
+function saveAchievement(){
+  const name=document.getElementById("achName").value.trim();
+  const result=document.getElementById("achResult").value;
+  const subject=document.getElementById("achSubject").value.trim();
+  const year=document.getElementById("achYear").value;
+  if(!name||!subject||!year){toast("Заполни все поля");return;}
+  state.achievements.push({id:Date.now(),name,result,subject,year});
+  saveState();closeModal();renderAll();toast("Достижение сохранено!");
+}
+
+function deleteAchievement(id){
+  state.achievements=state.achievements.filter(a=>a.id!==id);
+  saveState();renderAll();toast("Достижение удалено");
+}
+
+function renderAchievements(){
+  const items=state.achievements;
+  const winners=items.filter(a=>a.result==="Победитель"||a.result==="Призёр").length;
+  document.getElementById("achievementBig").textContent=items.length;
+  document.getElementById("achTotal").textContent=items.length;
+  document.getElementById("achWinners").textContent=winners;
+  document.getElementById("achSubjects").textContent=new Set(items.map(a=>a.subject)).size;
+
+  document.getElementById("achievementList").innerHTML=items.map(a=>`
+    <div class="task">
+      <div class="stat-icon">🏅</div>
+      <div style="flex:1">
+        <div class="task-title">${escapeHTML(a.name)}</div>
+        <div class="task-date">${escapeHTML(a.subject)} · ${escapeHTML(a.year)}</div>
+      </div>
+      <span class="tag ${a.result==="Победитель"?"green":a.result==="Призёр"?"orange":""}">${escapeHTML(a.result)}</span>
+      <button class="btn btn-danger btn-small" onclick="deleteAchievement(${Number(a.id)})">Удалить</button>
+    </div>`).join("")||'<div class="empty">Здесь появятся твои победы, призовые места и другие результаты.</div>';
+}
+
+/* ВУЗЫ */
+function openUniversityModal(){
+  openModal("Добавить вуз",`
+    <div class="field" style="margin-bottom:12px"><label>Название университета</label><input id="uniName" placeholder="Название вуза"></div>
+    <div class="field" style="margin-bottom:12px"><label>Направление</label><input id="uniDirection" placeholder="Направление подготовки"></div>
+    <div class="field" style="margin-bottom:18px"><label>Информация о льготах</label><input id="uniBenefit" placeholder="Добавь ссылку или заметку"></div>
+    <button class="btn" onclick="saveUniversity()">Добавить вуз</button>
+  `);
+}
+
+function saveUniversity(){
+  const name=document.getElementById("uniName").value.trim();
+  const direction=document.getElementById("uniDirection").value.trim();
+  const benefit=document.getElementById("uniBenefit").value.trim();
+  if(!name){toast("Укажи название вуза");return;}
+  state.universities.push({name,direction,benefit});
+  saveState();closeModal();renderUniversities();toast("Вуз добавлен");
+}
+
+function renderUniversities(){
+  document.getElementById("universityList").innerHTML=state.universities.map((u,i)=>`
+    <div class="card">
+      <div class="olympiad-icon">🎓</div>
+      <h3 style="margin-top:13px">${escapeHTML(u.name)}</h3>
+      <p class="muted">${escapeHTML(u.direction||"Направление не указано")}</p>
+      <p class="muted">${escapeHTML(u.benefit||"Добавь информацию об условиях приёма.")}</p>
+      <button class="btn btn-danger btn-small" onclick="deleteUniversity(${i})">Удалить</button>
+    </div>`).join("");
+}
+
+function deleteUniversity(index){
+  state.universities.splice(index,1);
+  saveState();renderUniversities();toast("Вуз удалён");
+}
+
+/* AI-КОНСУЛЬТАНТ: ДЕМО-ОТВЕТЫ */
+function assistantAnswer(question){
+  const q=question.toLowerCase();
+  if(q.includes("начать")||q.includes("старт"))
+    return "Начни с выбора 1–2 предметов, которые тебе действительно интересны. Затем изучи подходящие олимпиады, требования и задания прошлых лет. После этого составь реалистичный график занятий.";
+  if(q.includes("выбрать")||q.includes("какую олимпиаду"))
+    return "Сравни олимпиады по предмету, классу, формату заданий, уровню сложности и срокам. В каталоге проекта можно отфильтровать соревнования и добавить подходящие в личный план.";
+  if(q.includes("распис")||q.includes("время"))
+    return "Попробуй выделить несколько регулярных занятий в неделю. Чередуй теорию, практику и разбор ошибок. Оставляй свободное время и не планируй подготовку каждый день без отдыха.";
+  if(q.includes("бви")||q.includes("льгот")||q.includes("поступ"))
+    return "Олимпиада может давать БВИ, 100 баллов по профильному ЕГЭ или дополнительные баллы. Но условия устанавливает каждый вуз. Проверь официальный перечень олимпиад и правила приёма нужного года.";
+  if(q.includes("математ"))
+    return "Для подготовки по математике полезно сочетать теорию, задачи разных уровней и подробный разбор решений. Начни с диагностики и постепенно увеличивай сложность.";
+  return "Хороший следующий шаг — определить цель, выбрать предмет и посмотреть календарь соревнований. Я демонстрационный консультант, поэтому не могу проверить актуальные правила или официальные даты. Для этого используй сайты организаторов и вузов.";
+}
+
+function sendMessage(){
+  const input=document.getElementById("chatInput");
+  const text=input.value.trim();
+  if(!text)return;
+  const box=document.getElementById("chatMessages");
+  const user=document.createElement("div");
+  user.className="message user";
+  user.textContent=text;
+  box.appendChild(user);
+  const answer=document.createElement("div");
+  answer.className="message";
+  answer.textContent=assistantAnswer(text);
+  box.appendChild(answer);
+  input.value="";
+  box.scrollTop=box.scrollHeight;
+}
+
+document.getElementById("chatInput").addEventListener("keydown",e=>{
+  if(e.key==="Enter")sendMessage();
+});
+
+/* РОДИТЕЛЬСКИЙ РЕЖИМ */
+function renderParent(){
+  const p=progress();
+  document.getElementById("parentProgress").textContent=p.percent+"%";
+  document.getElementById("parentTasks").textContent=p.completed;
+  document.getElementById("parentAchievements").textContent=state.achievements.length;
+  document.getElementById("parentGoal").textContent=state.profile.goal||"Не выбрана";
+  document.getElementById("parentProfile").textContent=
+    [state.profile.name,state.profile.grade?state.profile.grade+" класс":null,state.profile.region]
+      .filter(Boolean).join(" · ")||"Заполните профиль ученика.";
+}
+
+/* МОДАЛЬНОЕ ОКНО */
+function openModal(title,content){
+  document.getElementById("modalTitle").textContent=title;
+  document.getElementById("modalBody").innerHTML=content;
+  document.getElementById("modalBackdrop").classList.add("open");
+}
+function closeModal(){
+  document.getElementById("modalBackdrop").classList.remove("open");
+}
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape")closeModal();
+});
+
+/* ОБНОВЛЕНИЕ ИНТЕРФЕЙСА */
+function renderAll(){
+  renderHome();
+  renderPlan();
+  renderCatalog();
+  renderHomeOlympiads();
+  renderCalendar();
+  renderAchievements();
+  renderUniversities();
+  renderParent();
+  document.getElementById("userName").textContent=state.profile.name||"Ученик";
+  document.getElementById("avatar").textContent=(state.profile.name||"У").charAt(0).toUpperCase();
+}
+
+function init(){
+  fillProfile();
+  renderAll();
+  document.getElementById("reminderDate").min=new Date().toISOString().slice(0,10);
+}
+
+init();
+</script>
+</body>
+</html>
