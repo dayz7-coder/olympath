@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#101828">
-  <title>Траектория — путь к олимпиаде</title>
+  <title>Olympath — путь к олимпиаде</title>
   <style>
     :root {
       --bg: #f5f7fb;
@@ -210,6 +209,8 @@
       font-weight: 650;
       font-size: 13px;
       transition: .2s;
+      text-decoration: none;
+      display: inline-block;
     }
 
     .btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
@@ -389,17 +390,126 @@
     .toast.show { opacity: 1; transform: translateY(0); }
 
     .chat-box {
-      height: 300px; overflow-y: auto; padding: 12px;
+      height: 360px; overflow-y: auto; padding: 12px;
       background: #f7f8fc; border-radius: 13px; margin-bottom: 12px;
+      display: flex; flex-direction: column;
     }
     .message {
       max-width: 85%; padding: 11px 13px; border-radius: 13px;
-      margin: 8px 0; font-size: 12px; line-height: 1.5;
-      background: white;
+      margin: 8px 0; font-size: 12.5px; line-height: 1.55;
+      background: white; white-space: pre-wrap; word-wrap: break-word;
+      box-shadow: 0 1px 2px rgba(25,35,65,.04);
     }
     .message.user { margin-left: auto; background: var(--primary); color: white; }
+    .message.error { background: #fff0f1; color: #cc5363; border: 1px solid #ffd9de; }
+    .message.assistant { margin-right: auto; }
+    .typing {
+      display: inline-flex; gap: 4px; align-items: center;
+      padding: 12px 14px; background: white; border-radius: 13px;
+      margin: 8px 0; width: fit-content;
+      box-shadow: 0 1px 2px rgba(25,35,65,.04);
+    }
+    .typing span {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--primary);
+      opacity: .4; animation: typingBlink 1.2s infinite;
+    }
+    .typing span:nth-child(2){ animation-delay: .2s; }
+    .typing span:nth-child(3){ animation-delay: .4s; }
+    @keyframes typingBlink { 0%, 60%, 100% { opacity: .25; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+    .preset-btn {
+      width: 100%; background: transparent; border: 0; text-align: left;
+      cursor: pointer; padding: 13px 0; border-bottom: 1px solid var(--border);
+      display: flex; gap: 12px; align-items: center;
+    }
+    .preset-btn:last-of-type { border-bottom: 0; }
+    .preset-btn:hover { background: #f7f8fc; border-radius: 8px; }
+
+    /* ЭКРАН ВХОДА / РЕГИСТРАЦИИ */
+    .auth-screen {
+      position: fixed; inset: 0; z-index: 100;
+      background: linear-gradient(135deg, #f5f7fb 0%, #eeecff 100%);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .auth-screen.hidden { display: none; }
+    .auth-card {
+      background: white; padding: 32px; border-radius: 20px;
+      max-width: 400px; width: 100%;
+      box-shadow: 0 20px 60px rgba(25,35,65,.12);
+    }
+    .auth-brand {
+      display: flex; align-items: center; gap: 11px;
+      font-size: 19px; font-weight: 800; margin-bottom: 22px;
+    }
+    .auth-tabs {
+      display: flex; gap: 4px; margin: 18px 0;
+      background: #f1f2f6; padding: 4px; border-radius: 11px;
+    }
+    .auth-tab {
+      flex: 1; padding: 10px; border: 0; background: transparent;
+      border-radius: 8px; font-weight: 600; color: var(--muted);
+      font-size: 13px;
+    }
+    .auth-tab.active {
+      background: white; color: var(--primary);
+      box-shadow: 0 2px 6px rgba(0,0,0,.06);
+    }
+    .auth-error {
+      background: #fff0f1; color: var(--red); padding: 10px 12px;
+      border-radius: 8px; font-size: 12.5px; margin-bottom: 12px;
+      border: 1px solid #ffd9de; line-height: 1.4;
+    }
+    .auth-success {
+      background: #e4f7ef; color: var(--green); padding: 10px 12px;
+      border-radius: 8px; font-size: 12.5px; margin-bottom: 12px;
+      border: 1px solid #c4ebd9;
+    }
+    .topbar-logout {
+      margin-left: 8px;
+    }
+    .app-loading {
+      position: fixed; inset: 0; z-index: 90;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 14px;
+    }
+    .app-loading.hidden { display: none; }
 
     .mobile-menu { display: none; }
+
+    /* Стили для вкладки «Задания» */
+    .material-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .material-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(25,35,65,.1);
+    }
+    .material-card .olympiad-icon {
+      background: #f0efff;
+    }
+    .material-card h3 { margin: 0; }
+    .material-card p { font-size: 12px; color: var(--muted); line-height: 1.5; margin: 0; }
+    .material-card .btn { margin-top: auto; align-self: flex-start; }
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 6px 12px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .section-badge.exam { background: #fff3e3; color: #b87519; }
+    .section-badge.olymp { background: #e4f7ef; color: #13865f; }
 
     @media(max-width: 1050px) {
       main { padding: 25px 22px; }
@@ -424,17 +534,56 @@
   </style>
 </head>
 <body>
-<div class="layout">
+<!-- ЭКРАН ВХОДА / РЕГИСТРАЦИИ -->
+<div class="auth-screen hidden" id="authScreen">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <div class="brand-icon">✦</div>
+      <span>olympath</span>
+    </div>
+    <h2 id="authTitle" style="margin:0 0 6px">Вход</h2>
+    <p class="muted" id="authSubtitle" style="margin:0">Войдите в аккаунт, чтобы сохранить свой прогресс</p>
+    <div class="auth-tabs">
+      <button type="button" class="auth-tab active" data-tab="login" onclick="switchAuthTab('login')">Вход</button>
+      <button type="button" class="auth-tab" data-tab="register" onclick="switchAuthTab('register')">Регистрация</button>
+    </div>
+    <form id="authForm" onsubmit="submitAuth(event)">
+      <div id="registerField" class="field" style="display:none;margin-bottom:12px">
+        <label>Имя</label>
+        <input id="authName" placeholder="Как к вам обращаться" autocomplete="name" maxlength="60">
+      </div>
+      <div class="field" style="margin-bottom:12px">
+        <label>Email</label>
+        <input id="authEmail" type="email" placeholder="example@mail.ru" autocomplete="email" required>
+      </div>
+      <div class="field" style="margin-bottom:18px">
+        <label>Пароль</label>
+        <input id="authPassword" type="password" placeholder="Минимум 6 символов" autocomplete="current-password" required minlength="6">
+      </div>
+      <div id="authError" class="auth-error" style="display:none"></div>
+      <button type="submit" class="btn" style="width:100%" id="authSubmit">Войти</button>
+    </form>
+    <p class="small" style="margin-top:14px;text-align:center">
+      Аккаунт нужен, чтобы сохранить профиль, план и достижения.
+    </p>
+  </div>
+</div>
+
+<!-- ЗАГРУЗОЧНЫЙ ЭКРАН -->
+<div class="app-loading" id="appLoading">Загрузка…</div>
+
+<div class="layout" id="appLayout" style="display:none">
   <aside class="sidebar" id="sidebar">
     <div class="brand">
       <div class="brand-icon">✦</div>
-      <span>траектория</span>
+      <span>olympath</span>
     </div>
 
     <div class="nav-label">Рабочее пространство</div>
     <button class="nav-btn active" data-page="home"><span class="nav-icon">⌂</span>Главная</button>
     <button class="nav-btn" data-page="plan"><span class="nav-icon">◈</span>Моя траектория</button>
     <button class="nav-btn" data-page="catalog"><span class="nav-icon">▦</span>Олимпиады</button>
+    <button class="nav-btn" data-page="materials"><span class="nav-icon">▤</span>Задания</button>
     <button class="nav-btn" data-page="calendar"><span class="nav-icon">▣</span>Календарь</button>
     <button class="nav-btn" data-page="achievements"><span class="nav-icon">★</span>Достижения</button>
 
@@ -445,7 +594,7 @@
     <button class="nav-btn" data-page="profile"><span class="nav-icon">⚙</span>Мой профиль</button>
 
     <div class="sidebar-bottom">
-      Траектория в олимпиаду<br>
+      Olympath — путь в олимпиаду<br>
       Твой путь к большим возможностям
     </div>
   </aside>
@@ -460,7 +609,7 @@
       <div class="user">
         <div class="avatar" id="avatar">У</div>
         <span id="userName">Ученик</span>
-        <span>⌄</span>
+        <button class="btn btn-outline btn-small topbar-logout" onclick="doLogout()" title="Выйти из аккаунта">Выйти</button>
       </div>
     </header>
 
@@ -581,6 +730,112 @@
       <div class="grid grid-3" id="catalogList"></div>
     </section>
 
+    <!-- ЗАДАНИЯ -->
+    <section class="page" id="page-materials">
+      <div class="hero">
+        <div class="hero-content">
+          <span class="tag" style="background:#ffffff25;color:white">ТРЕНИРОВКА</span>
+          <h2>Задания прошлых лет</h2>
+          <p>Официальные банки ФИПИ и архивы олимпиад. Выбери раздел — ОГЭ, ЕГЭ или олимпиады 7–11 классов — и переходи к тренировке.</p>
+        </div>
+      </div>
+
+      <!-- ОЛИМПИАДЫ 7-11 -->
+      <div class="section-head" style="margin-top:0">
+        <div>
+          <span class="section-badge olymp">Олимпиады · 7–11 класс</span>
+          <h2>Задания олимпиад прошлых лет</h2>
+        </div>
+      </div>
+      <div class="grid grid-3">
+        <div class="card material-card">
+          <div class="olympiad-icon">🏆</div>
+          <h3>Всероссийская олимпиада (ВсОШ)</h3>
+          <p>Школьный, муниципальный, региональный и заключительный этапы по 24 предметам. Архивы по годам.</p>
+          <a class="btn btn-outline btn-small" href="https://olimpiada.ru" target="_blank" rel="noopener">olimpiada.ru →</a>
+        </div>
+        <div class="card material-card">
+          <div class="olympiad-icon">🏙️</div>
+          <h3>Московская олимпиада школьников</h3>
+          <p>Задания и решения прошлых лет по математике, информатике, истории, обществознанию и другим предметам.</p>
+          <a class="btn btn-outline btn-small" href="https://mos.olimpiada.ru" target="_blank" rel="noopener">mos.olimpiada.ru →</a>
+        </div>
+        <div class="card material-card">
+          <div class="olympiad-icon">🧬</div>
+          <h3>СПбГУ — биология</h3>
+          <p>Архив с 2007 года: варианты для 7–8, 9, 10–11 классов с решениями.</p>
+          <a class="btn btn-outline btn-small" href="https://bio.spbu.ru/10-str.html" target="_blank" rel="noopener">bio.spbu.ru →</a>
+        </div>
+        <div class="card material-card">
+          <div class="olympiad-icon">⚡</div>
+          <h3>«Надежда энергетики»</h3>
+          <p>Физика, математика, информатика — варианты, ответы и решения для 7–11 классов.</p>
+          <a class="btn btn-outline btn-small" href="https://energy-hope.ru/arch_xxiii/tasks.html" target="_blank" rel="noopener">energy-hope.ru →</a>
+        </div>
+        <div class="card material-card">
+          <div class="olympiad-icon">📐</div>
+          <h3>Турнир Ломоносова</h3>
+          <p>Биология, химия, история, лингвистика — задания и решения прошлых лет.</p>
+          <a class="btn btn-outline btn-small" href="https://olympiads.mccme.ru/turlom/" target="_blank" rel="noopener">olympiads.mccme.ru →</a>
+        </div>
+        <div class="card material-card">
+          <div class="olympiad-icon">💻</div>
+          <h3>Информатика (МЦНМО)</h3>
+          <p>Тысячи задач из олимпиад с онлайн-проверкой решений.</p>
+          <a class="btn btn-outline btn-small" href="https://informatics.mccme.ru/" target="_blank" rel="noopener">informatics.mccme.ru →</a>
+        </div>
+      </div>
+
+      <!-- ОГЭ -->
+      <div class="section-head">
+        <div>
+          <span class="section-badge exam">ОГЭ · 9 класс</span>
+          <h2>Задания ОГЭ прошлых лет</h2>
+        </div>
+      </div>
+      <div class="grid grid-2">
+        <div class="card material-card">
+          <div class="olympiad-icon">📘</div>
+          <h3>Открытый банк заданий ОГЭ (ФИПИ)</h3>
+          <p>Официальный банк по всем предметам: русский язык, математика, физика, химия, биология, география, история, обществознание, информатика, иностранные языки, литература. Онлайн-проверка ответов.</p>
+          <a class="btn" href="https://fipi.ru/oge/otkrytyy-bank-zadaniy-oge" target="_blank" rel="noopener">Открыть банк ОГЭ →</a>
+        </div>
+        <div class="card material-card">
+          <div class="olympiad-icon">📝</div>
+          <h3>Новая версия банка ОГЭ</h3>
+          <p>Актуальные задания с поиском и сортировкой. Можно выполнять задания с кратким ответом и сразу проверять результат онлайн.</p>
+          <a class="btn btn-outline" href="https://oge.fipi.ru/bank/index.php" target="_blank" rel="noopener">oge.fipi.ru →</a>
+        </div>
+      </div>
+
+      <!-- ЕГЭ -->
+      <div class="section-head">
+        <div>
+          <span class="section-badge exam">ЕГЭ · 11 класс</span>
+          <h2>Задания ЕГЭ прошлых лет</h2>
+        </div>
+      </div>
+      <div class="grid grid-2">
+        <div class="card material-card">
+          <div class="olympiad-icon">📗</div>
+          <h3>Открытый банк заданий ЕГЭ (ФИПИ)</h3>
+          <p>Все предметы: русский язык, математика (база и профиль), физика, химия, биология, география, история, обществознание, информатика, иностранные языки, литература.</p>
+          <a class="btn" href="https://fipi.ru/ege/otkrytyy-bank-zadaniy-ege" target="_blank" rel="noopener">Открыть банк ЕГЭ →</a>
+        </div>
+        <div class="card material-card">
+          <div class="olympiad-icon">📄</div>
+          <h3>Новая версия банка ЕГЭ</h3>
+          <p>Задания с онлайн-проверкой, поиском и сортировкой. Актуальные типы заданий, аналогичные экзаменационным.</p>
+          <a class="btn btn-outline" href="https://ege.fipi.ru/bank/" target="_blank" rel="noopener">ege.fipi.ru →</a>
+        </div>
+      </div>
+
+      <p class="small" style="margin-top:25px;line-height:1.6">
+        Все ссылки ведут на официальные ресурсы: ФИПИ (Федеральный институт педагогических измерений) и проверенные архивы олимпиад.
+        Задания обновляются организаторами — актуальные версии всегда доступны по этим ссылкам.
+      </p>
+    </section>
+
     <!-- КАЛЕНДАРЬ -->
     <section class="page" id="page-calendar">
       <div class="section-head" style="margin-top:0">
@@ -659,22 +914,26 @@
       <div class="grid grid-2">
         <div class="card">
           <h2>✧ AI-консультант</h2>
-          <p class="muted">Задай вопрос о подготовке, выборе олимпиады или планировании.</p>
+          <p class="muted">Задай вопрос о подготовке, выборе олимпиады или планировании. Отвечает настоящая языковая модель.</p>
           <div class="chat-box" id="chatMessages">
-            <div class="message">Привет! Я демонстрационный помощник проекта «Траектория». Могу подсказать, как организовать подготовку и выбрать следующий шаг. Чем помочь?</div>
+            <div class="message">Привет! Я AI-консультант проекта «Olympath». Помогу выбрать предмет, подобрать олимпиаду, составить план подготовки и разобраться с льготами при поступлении. О чём поговорим?</div>
           </div>
           <div class="toolbar" style="margin:0">
-            <input id="chatInput" placeholder="Напиши свой вопрос...">
-            <button class="btn" onclick="sendMessage()">Отправить</button>
+            <input id="chatInput" placeholder="Напиши свой вопрос..." maxlength="2000">
+            <button class="btn" id="chatSendBtn" onclick="sendMessage()">Отправить</button>
+          </div>
+          <div class="small" style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;gap:10px">
+            <span id="chatStatus"></span>
+            <button class="btn btn-outline btn-small" onclick="clearChat()">Очистить диалог</button>
           </div>
         </div>
         <div class="card">
           <h2>Популярные вопросы</h2>
-          <div class="task"><span>💡</span><div><div class="task-title">С чего начать подготовку?</div><div class="task-date">Выбор предмета и уровня</div></div></div>
-          <div class="task"><span>🏆</span><div><div class="task-title">Как выбрать олимпиаду?</div><div class="task-date">Оценка интересов и целей</div></div></div>
-          <div class="task"><span>📅</span><div><div class="task-title">Как составить расписание?</div><div class="task-date">Планирование занятий</div></div></div>
-          <div class="task"><span>🎓</span><div><div class="task-title">Какие льготы бывают?</div><div class="task-date">Условия поступления в вузы</div></div></div>
-          <p class="small">Это локальная демонстрация, а не подключённая языковая модель. Для настоящего AI-консультанта потребуется серверная часть и подключение модели с базой проверенных источников.</p>
+          <button class="task" style="width:100%;background:transparent;border:0;text-align:left;cursor:pointer" onclick="askPreset('С чего начать подготовку к олимпиаде?')"><span>💡</span><div><div class="task-title">С чего начать подготовку?</div><div class="task-date">Выбор предмета и уровня</div></div></button>
+          <button class="task" style="width:100%;background:transparent;border:0;text-align:left;cursor:pointer" onclick="askPreset('Как выбрать подходящую олимпиаду?')"><span>🏆</span><div><div class="task-title">Как выбрать олимпиаду?</div><div class="task-date">Оценка интересов и целей</div></div></button>
+          <button class="task" style="width:100%;background:transparent;border:0;text-align:left;cursor:pointer" onclick="askPreset('Как составить расписание занятий?')"><span>📅</span><div><div class="task-title">Как составить расписание?</div><div class="task-date">Планирование занятий</div></div></button>
+          <button class="task" style="width:100%;background:transparent;border:0;text-align:left;cursor:pointer" onclick="askPreset('Какие льготы для поступления дают олимпиады?')"><span>🎓</span><div><div class="task-title">Какие льготы бывают?</div><div class="task-date">Условия поступления в вузы</div></div></button>
+          <p class="small">AI-консультант работает на языковой модели. Ответы носят рекомендательный характер — актуальные правила и даты проверяй на официальных сайтах организаторов и вузов.</p>
         </div>
       </div>
     </section>
@@ -791,7 +1050,7 @@ const defaultUniversities = [
   {name:"ИТМО",direction:"Информатика, инженерия, технологии",benefit:"Возможны особые условия для победителей и призёров отдельных олимпиад."}
 ];
 
-/* СОСТОЯНИЕ И ЛОКАЛЬНОЕ ХРАНИЛИЩЕ */
+/* СОСТОЯНИЕ И СЕРВЕР: данные привязаны к аккаунту */
 const initialState = {
   profile:{name:"",grade:"",region:"",goal:"Победа в олимпиаде",university:"",direction:"",subjects:[]},
   tasks:defaultTasks,
@@ -802,37 +1061,60 @@ const initialState = {
   chat:[]
 };
 
-function loadState(){
+let state=null;
+let currentUser=null;
+let authMode="login";
+
+function mergeWithDefaults(data){
+  data=data||{};
+  const tasks=Array.isArray(data.tasks)&&data.tasks.length?data.tasks:structuredClone(defaultTasks);
+  const universities=Array.isArray(data.universities)&&data.universities.length?data.universities:structuredClone(defaultUniversities);
+  return {
+    profile:{...initialState.profile,...(data.profile||{})},
+    tasks,
+    reminders:Array.isArray(data.reminders)?data.reminders:[],
+    achievements:Array.isArray(data.achievements)?data.achievements:[],
+    universities,
+    favorites:Array.isArray(data.favorites)?data.favorites:[],
+    chat:[]
+  };
+}
+
+async function loadStateFromServer(){
   try {
-    const saved=localStorage.getItem("trajectoryApp");
-    if(!saved) return structuredClone(initialState);
-    const data=JSON.parse(saved);
-    return {
-      ...structuredClone(initialState),
-      ...data,
-      profile:{...initialState.profile,...(data.profile||{})},
-      tasks:Array.isArray(data.tasks)?data.tasks:structuredClone(defaultTasks),
-      reminders:Array.isArray(data.reminders)?data.reminders:[],
-      achievements:Array.isArray(data.achievements)?data.achievements:[],
-      universities:Array.isArray(data.universities)?data.universities:structuredClone(defaultUniversities),
-      favorites:Array.isArray(data.favorites)?data.favorites:[],
-      chat:Array.isArray(data.chat)?data.chat:[]
-    };
-  } catch(error) {
-    console.warn("Не удалось загрузить данные",error);
-    return structuredClone(initialState);
+    const res=await fetch("/api/state",{credentials:"same-origin"});
+    if(!res.ok) throw new Error("state fetch failed: "+res.status);
+    const {data}=await res.json();
+    state=mergeWithDefaults(data);
+  } catch(error){
+    console.warn("Не удалось загрузить данные с сервера",error);
+    state=structuredClone(initialState);
+    state.profile.name=currentUser?currentUser.name:"";
   }
 }
 
-let state=loadState();
-
+let saveTimer=null;
+let saveInFlight=false;
 function saveState(){
-  try {
-    localStorage.setItem("trajectoryApp",JSON.stringify(state));
-  } catch(error) {
-    console.warn("Не удалось сохранить данные",error);
-    toast("Не удалось сохранить данные в браузере");
-  }
+  if(!currentUser)return;
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(async ()=>{
+    if(saveInFlight)return;
+    saveInFlight=true;
+    try {
+      const res=await fetch("/api/state",{
+        method:"PUT",
+        headers:{"Content-Type":"application/json"},
+        credentials:"same-origin",
+        body:JSON.stringify(state)
+      });
+      if(!res.ok)console.warn("save state http",res.status);
+    } catch(error){
+      console.warn("Не удалось сохранить данные",error);
+    } finally {
+      saveInFlight=false;
+    }
+  },400);
 }
 
 function escapeHTML(value){
@@ -857,11 +1139,11 @@ function navigate(page){
   target.classList.add("active");
   const labels={
     home:"Главная",plan:"Моя траектория",catalog:"Олимпиады",
-    calendar:"Календарь",achievements:"Достижения",
+    materials:"Задания",calendar:"Календарь",achievements:"Достижения",
     universities:"Вузы и льготы",assistant:"AI-консультант",
     parent:"Родителям",profile:"Мой профиль"
   };
-  document.getElementById("pageTitle").textContent=labels[page]||"Траектория";
+  document.getElementById("pageTitle").textContent=labels[page]||"Olympath";
   document.getElementById("sidebar").classList.remove("open");
   renderAll();
   window.scrollTo({top:0,behavior:"smooth"});
@@ -1214,41 +1496,112 @@ function deleteUniversity(index){
   saveState();renderUniversities();toast("Вуз удалён");
 }
 
-/* AI-КОНСУЛЬТАНТ: ДЕМО-ОТВЕТЫ */
-function assistantAnswer(question){
-  const q=question.toLowerCase();
-  if(q.includes("начать")||q.includes("старт"))
-    return "Начни с выбора 1–2 предметов, которые тебе действительно интересны. Затем изучи подходящие олимпиады, требования и задания прошлых лет. После этого составь реалистичный график занятий.";
-  if(q.includes("выбрать")||q.includes("какую олимпиаду"))
-    return "Сравни олимпиады по предмету, классу, формату заданий, уровню сложности и срокам. В каталоге проекта можно отфильтровать соревнования и добавить подходящие в личный план.";
-  if(q.includes("распис")||q.includes("время"))
-    return "Попробуй выделить несколько регулярных занятий в неделю. Чередуй теорию, практику и разбор ошибок. Оставляй свободное время и не планируй подготовку каждый день без отдыха.";
-  if(q.includes("бви")||q.includes("льгот")||q.includes("поступ"))
-    return "Олимпиада может давать БВИ, 100 баллов по профильному ЕГЭ или дополнительные баллы. Но условия устанавливает каждый вуз. Проверь официальный перечень олимпиад и правила приёма нужного года.";
-  if(q.includes("математ"))
-    return "Для подготовки по математике полезно сочетать теорию, задачи разных уровней и подробный разбор решений. Начни с диагностики и постепенно увеличивай сложность.";
-  return "Хороший следующий шаг — определить цель, выбрать предмет и посмотреть календарь соревнований. Я демонстрационный консультант, поэтому не могу проверить актуальные правила или официальные даты. Для этого используй сайты организаторов и вузов.";
+/* AI-КОНСУЛЬТАНТ: НАСТОЯЩАЯ ЯЗЫКОВАЯ МОДЕЛЬ */
+function getChatSessionId(){
+  let sid=localStorage.getItem("olympathChatSid");
+  if(!sid){
+    sid="chat-"+Date.now()+"-"+Math.random().toString(36).slice(2,8);
+    localStorage.setItem("olympathChatSid",sid);
+  }
+  return sid;
 }
 
-function sendMessage(){
-  const input=document.getElementById("chatInput");
-  const text=input.value.trim();
-  if(!text)return;
+function appendMessage(text,className){
   const box=document.getElementById("chatMessages");
-  const user=document.createElement("div");
-  user.className="message user";
-  user.textContent=text;
-  box.appendChild(user);
-  const answer=document.createElement("div");
-  answer.className="message";
-  answer.textContent=assistantAnswer(text);
-  box.appendChild(answer);
-  input.value="";
+  const el=document.createElement("div");
+  el.className="message "+(className||"assistant");
+  el.textContent=text;
+  box.appendChild(el);
+  box.scrollTop=box.scrollHeight;
+  return el;
+}
+
+function showTyping(){
+  const box=document.getElementById("chatMessages");
+  const el=document.createElement("div");
+  el.className="typing";
+  el.id="typingIndicator";
+  el.innerHTML="<span></span><span></span><span></span>";
+  box.appendChild(el);
   box.scrollTop=box.scrollHeight;
 }
 
+function hideTyping(){
+  const el=document.getElementById("typingIndicator");
+  if(el)el.remove();
+}
+
+function setChatStatus(text){
+  document.getElementById("chatStatus").textContent=text||"";
+}
+
+function setChatSending(sending){
+  const btn=document.getElementById("chatSendBtn");
+  const input=document.getElementById("chatInput");
+  btn.disabled=sending;
+  input.disabled=sending;
+  btn.textContent=sending?"Думаю…":"Отправить";
+  if(!sending)input.focus();
+}
+
+async function sendMessage(){
+  const input=document.getElementById("chatInput");
+  const text=input.value.trim();
+  if(!text)return;
+  appendMessage(text,"user");
+  input.value="";
+  setChatSending(true);
+  setChatStatus("");
+  showTyping();
+
+  try{
+    const res=await fetch("/api/chat",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({sessionId:getChatSessionId(),message:text})
+    });
+    hideTyping();
+    if(!res.ok){
+      let errText="Не удалось получить ответ. Попробуй ещё раз.";
+      try{const err=await res.json();if(err&&err.error)errText=err.error;}catch(_){}
+      appendMessage("Ошибка: "+errText,"error");
+      setChatSending(false);
+      return;
+    }
+    const data=await res.json();
+    const reply=data&&data.response?data.response:"Пустой ответ от модели. Попробуй переформулировать.";
+    appendMessage(reply,"assistant");
+  }catch(error){
+    hideTyping();
+    appendMessage("Сеть недоступна или сервер не отвечает. Проверь подключение и попробуй снова.","error");
+  }finally{
+    setChatSending(false);
+  }
+}
+
+function askPreset(question){
+  const input=document.getElementById("chatInput");
+  input.value=question;
+  const assistant=document.getElementById("page-assistant");
+  if(!assistant.classList.contains("active"))navigate("assistant");
+  sendMessage();
+}
+
+async function clearChat(){
+  const sid=getChatSessionId();
+  try{await fetch("/api/chat/"+encodeURIComponent(sid),{method:"DELETE"});}catch(_){}
+  localStorage.removeItem("olympathChatSid");
+  const box=document.getElementById("chatMessages");
+  box.innerHTML='<div class="message assistant">Диалог очищен. Задай новый вопрос!</div>';
+  setChatStatus("");
+  toast("Диалог очищен");
+}
+
 document.getElementById("chatInput").addEventListener("keydown",e=>{
-  if(e.key==="Enter")sendMessage();
+  if(e.key==="Enter"&&!e.shiftKey){
+    e.preventDefault();
+    sendMessage();
+  }
 });
 
 /* РОДИТЕЛЬСКИЙ РЕЖИМ */
@@ -1290,13 +1643,124 @@ function renderAll(){
   document.getElementById("avatar").textContent=(state.profile.name||"У").charAt(0).toUpperCase();
 }
 
-function init(){
-  fillProfile();
-  renderAll();
-  document.getElementById("reminderDate").min=new Date().toISOString().slice(0,10);
+/* ---------- АВТОРИЗАЦИЯ ---------- */
+function showAuth(){
+  document.getElementById("authScreen").classList.remove("hidden");
+  document.getElementById("appLayout").style.display="none";
+  document.getElementById("appLoading").classList.add("hidden");
+}
+function showApp(){
+  document.getElementById("authScreen").classList.add("hidden");
+  document.getElementById("appLoading").classList.add("hidden");
+  document.getElementById("appLayout").style.display="flex";
+}
+function setAuthError(text){
+  const el=document.getElementById("authError");
+  if(!text){el.style.display="none";el.textContent="";return;}
+  el.textContent=text;
+  el.style.display="block";
+}
+function switchAuthTab(mode){
+  authMode=mode;
+  const tabs=document.querySelectorAll(".auth-tab");
+  tabs.forEach(t=>t.classList.toggle("active",t.dataset.tab===mode));
+  const isReg=mode==="register";
+  document.getElementById("registerField").style.display=isReg?"flex":"none";
+  document.getElementById("authTitle").textContent=isReg?"Регистрация":"Вход";
+  document.getElementById("authSubtitle").textContent=isReg
+    ?"Создайте аккаунт, чтобы сохранить прогресс"
+    :"Войдите в аккаунт, чтобы продолжить";
+  document.getElementById("authSubmit").textContent=isReg?"Создать аккаунт":"Войти";
+  document.getElementById("authPassword").setAttribute("autocomplete",isReg?"new-password":"current-password");
+  setAuthError("");
 }
 
-init();
+async function submitAuth(event){
+  event.preventDefault();
+  setAuthError("");
+  const email=document.getElementById("authEmail").value.trim();
+  const password=document.getElementById("authPassword").value;
+  const submitBtn=document.getElementById("authSubmit");
+  submitBtn.disabled=true;
+  submitBtn.textContent=authMode==="register"?"Создаём…":"Входим…";
+  try {
+    const body=authMode==="register"
+      ?{name:document.getElementById("authName").value.trim(),email,password}
+      :{email,password};
+    const res=await fetch("/api/auth/"+authMode,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      credentials:"same-origin",
+      body:JSON.stringify(body)
+    });
+    const data=await res.json();
+    if(!res.ok){
+      setAuthError(data.error||("Ошибка "+res.status));
+      return;
+    }
+    currentUser=data.user;
+    await loadStateFromServer();
+    if(!state.profile.name&&currentUser.name)state.profile.name=currentUser.name;
+    fillProfile();
+    renderAll();
+    updateTopbarUser();
+    showApp();
+    document.getElementById("authForm").reset();
+    toast(authMode==="register"?"Аккаунт создан!":"С возвращением, "+currentUser.name+"!");
+  } catch(error){
+    setAuthError("Сеть недоступна или сервер не отвечает. Попробуйте ещё раз.");
+  } finally {
+    submitBtn.disabled=false;
+    submitBtn.textContent=authMode==="register"?"Создать аккаунт":"Войти";
+  }
+}
+
+async function doLogout(){
+  if(!confirm("Выйти из аккаунта? Несохранённые изменения будут потеряны."))return;
+  try {await fetch("/api/auth/logout",{method:"POST",credentials:"same-origin"});}catch(_){}
+  currentUser=null;
+  state=null;
+  localStorage.removeItem("olympathChatSid");
+  document.getElementById("appLayout").style.display="none";
+  switchAuthTab("login");
+  showAuth();
+}
+
+function updateTopbarUser(){
+  if(!currentUser)return;
+  document.getElementById("userName").textContent=currentUser.name||currentUser.email||"Пользователь";
+  document.getElementById("avatar").textContent=(currentUser.name||"У").charAt(0).toUpperCase();
+}
+
+async function checkAuth(){
+  try {
+    const res=await fetch("/api/auth/me",{credentials:"same-origin"});
+    if(!res.ok)return null;
+    const data=await res.json();
+    return data.user||null;
+  } catch { return null; }
+}
+
+async function init(){
+  const user=await checkAuth();
+  if(!user){
+    showAuth();
+    return;
+  }
+  currentUser=user;
+  await loadStateFromServer();
+  if(!state.profile.name&&currentUser.name)state.profile.name=currentUser.name;
+  fillProfile();
+  renderAll();
+  updateTopbarUser();
+  document.getElementById("reminderDate").min=new Date().toISOString().slice(0,10);
+  showApp();
+}
+
+init().catch(err=>{
+  console.error("init failed",err);
+  showAuth();
+});
 </script>
 </body>
 </html>
