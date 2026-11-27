@@ -730,13 +730,13 @@
       <div class="grid grid-3" id="catalogList"></div>
     </section>
 
-    <!-- ЗАДАНИЯ -->
+    <!-- ЗАДАНИЯ (без внешних ссылок) -->
     <section class="page" id="page-materials">
       <div class="hero">
         <div class="hero-content">
           <span class="tag" style="background:#ffffff25;color:white">ТРЕНИРОВКА</span>
           <h2>Задания прошлых лет</h2>
-          <p>Официальные банки ФИПИ и архивы олимпиад. Выбери раздел — ОГЭ, ЕГЭ или олимпиады 7–11 классов — и переходи к тренировке.</p>
+          <p>Архивы олимпиад, ОГЭ и ЕГЭ. Все материалы размещены на официальных сайтах организаторов — ищи их по названию олимпиады или экзамена.</p>
         </div>
       </div>
 
@@ -744,47 +744,10 @@
       <div class="section-head" style="margin-top:0">
         <div>
           <span class="section-badge olymp">Олимпиады · 7–11 класс</span>
-          <h2>Задания олимпиад прошлых лет</h2>
+          <h2>Задания олимпиад по предметам</h2>
         </div>
       </div>
-      <div class="grid grid-3">
-        <div class="card material-card">
-          <div class="olympiad-icon">🏆</div>
-          <h3>Всероссийская олимпиада (ВсОШ)</h3>
-          <p>Школьный, муниципальный, региональный и заключительный этапы по 24 предметам. Архивы по годам.</p>
-          <a class="btn btn-outline btn-small" href="https://olimpiada.ru" target="_blank" rel="noopener">olimpiada.ru →</a>
-        </div>
-        <div class="card material-card">
-          <div class="olympiad-icon">🏙️</div>
-          <h3>Московская олимпиада школьников</h3>
-          <p>Задания и решения прошлых лет по математике, информатике, истории, обществознанию и другим предметам.</p>
-          <a class="btn btn-outline btn-small" href="https://mos.olimpiada.ru" target="_blank" rel="noopener">mos.olimpiada.ru →</a>
-        </div>
-        <div class="card material-card">
-          <div class="olympiad-icon">🧬</div>
-          <h3>СПбГУ — биология</h3>
-          <p>Архив с 2007 года: варианты для 7–8, 9, 10–11 классов с решениями.</p>
-          <a class="btn btn-outline btn-small" href="https://bio.spbu.ru/10-str.html" target="_blank" rel="noopener">bio.spbu.ru →</a>
-        </div>
-        <div class="card material-card">
-          <div class="olympiad-icon">⚡</div>
-          <h3>«Надежда энергетики»</h3>
-          <p>Физика, математика, информатика — варианты, ответы и решения для 7–11 классов.</p>
-          <a class="btn btn-outline btn-small" href="https://energy-hope.ru/arch_xxiii/tasks.html" target="_blank" rel="noopener">energy-hope.ru →</a>
-        </div>
-        <div class="card material-card">
-          <div class="olympiad-icon">📐</div>
-          <h3>Турнир Ломоносова</h3>
-          <p>Биология, химия, история, лингвистика — задания и решения прошлых лет.</p>
-          <a class="btn btn-outline btn-small" href="https://olympiads.mccme.ru/turlom/" target="_blank" rel="noopener">olympiads.mccme.ru →</a>
-        </div>
-        <div class="card material-card">
-          <div class="olympiad-icon">💻</div>
-          <h3>Информатика (МЦНМО)</h3>
-          <p>Тысячи задач из олимпиад с онлайн-проверкой решений.</p>
-          <a class="btn btn-outline btn-small" href="https://informatics.mccme.ru/" target="_blank" rel="noopener">informatics.mccme.ru →</a>
-        </div>
-      </div>
+      <div class="grid grid-3" id="olympMaterialsGrid"></div>
 
       <!-- ОГЭ -->
       <div class="section-head">
@@ -796,15 +759,15 @@
       <div class="grid grid-2">
         <div class="card material-card">
           <div class="olympiad-icon">📘</div>
-          <h3>Открытый банк заданий ОГЭ (ФИПИ)</h3>
+          <h3>Открытый банк заданий ОГЭ</h3>
           <p>Официальный банк по всем предметам: русский язык, математика, физика, химия, биология, география, история, обществознание, информатика, иностранные языки, литература. Онлайн-проверка ответов.</p>
-          <a class="btn" href="https://fipi.ru/oge/otkrytyy-bank-zadaniy-oge" target="_blank" rel="noopener">Открыть банк ОГЭ →</a>
+          <span class="tag orange">Официальный источник: ФИПИ</span>
         </div>
         <div class="card material-card">
           <div class="olympiad-icon">📝</div>
           <h3>Новая версия банка ОГЭ</h3>
           <p>Актуальные задания с поиском и сортировкой. Можно выполнять задания с кратким ответом и сразу проверять результат онлайн.</p>
-          <a class="btn btn-outline" href="https://oge.fipi.ru/bank/index.php" target="_blank" rel="noopener">oge.fipi.ru →</a>
+          <span class="tag orange">Официальный источник: ФИПИ</span>
         </div>
       </div>
 
@@ -818,21 +781,21 @@
       <div class="grid grid-2">
         <div class="card material-card">
           <div class="olympiad-icon">📗</div>
-          <h3>Открытый банк заданий ЕГЭ (ФИПИ)</h3>
+          <h3>Открытый банк заданий ЕГЭ</h3>
           <p>Все предметы: русский язык, математика (база и профиль), физика, химия, биология, география, история, обществознание, информатика, иностранные языки, литература.</p>
-          <a class="btn" href="https://fipi.ru/ege/otkrytyy-bank-zadaniy-ege" target="_blank" rel="noopener">Открыть банк ЕГЭ →</a>
+          <span class="tag orange">Официальный источник: ФИПИ</span>
         </div>
         <div class="card material-card">
           <div class="olympiad-icon">📄</div>
           <h3>Новая версия банка ЕГЭ</h3>
           <p>Задания с онлайн-проверкой, поиском и сортировкой. Актуальные типы заданий, аналогичные экзаменационным.</p>
-          <a class="btn btn-outline" href="https://ege.fipi.ru/bank/" target="_blank" rel="noopener">ege.fipi.ru →</a>
+          <span class="tag orange">Официальный источник: ФИПИ</span>
         </div>
       </div>
 
       <p class="small" style="margin-top:25px;line-height:1.6">
-        Все ссылки ведут на официальные ресурсы: ФИПИ (Федеральный институт педагогических измерений) и проверенные архивы олимпиад.
-        Задания обновляются организаторами — актуальные версии всегда доступны по этим ссылкам.
+        Задания обновляются организаторами каждый год. Актуальные версии всегда доступны на официальных сайтах:
+        ФИПИ (ОГЭ/ЕГЭ), «Олимпиада.ру» (ВсОШ), сайты вузов (СПбГУ, МЦНМО, МФТИ и др.).
       </p>
     </section>
 
@@ -1031,6 +994,21 @@ const olympiads = [
   {id:8,name:"Олимпиада по истории",subject:"История",level:3,icon:"🏛️",classes:"9–11 классы",description:"Работа с историческими источниками и фактами.",season:"Уточнять по сезону",type:"Предметная"},
   {id:9,name:"Олимпиада по русскому языку",subject:"Русский язык",level:2,icon:"✍️",classes:"8–11 классы",description:"Задания по языку, культуре речи и лингвистике.",season:"Уточнять по сезону",type:"Предметная"},
   {id:10,name:"Олимпиада по физике",subject:"Физика",level:3,icon:"🔭",classes:"7–11 классы",description:"Задачи по основным разделам физики.",season:"Уточнять по сезону",type:"Предметная"}
+];
+
+/* ЗАДАНИЯ ПО ПРЕДМЕТАМ (без внешних ссылок) */
+const SUBJECT_MATERIALS = [
+  {subject:"Русский язык",    icon:"✍️",  source:"ВсОШ · Московская олимпиада"},
+  {subject:"Математика",      icon:"📐",  source:"ВсОШ · Физтех · Ломоносов · Надежда энергетики"},
+  {subject:"Химия",           icon:"🧪",  source:"ВсОШ · Турнир Ломоносова"},
+  {subject:"Биология",        icon:"🧬",  source:"ВсОШ · СПбГУ (с 2007) · Турнир Ломоносова"},
+  {subject:"Физика",          icon:"⚛️",  source:"ВсОШ · Физтех · Надежда энергетики"},
+  {subject:"Информатика",     icon:"💻",  source:"ВсОШ · МЦНМО (онлайн-проверка)"},
+  {subject:"История",         icon:"🏛️",  source:"ВсОШ · Московская олимпиада · Турнир Ломоносова"},
+  {subject:"Обществознание",  icon:"📚",  source:"ВсОШ · Высшая проба · Московская олимпиада"},
+  {subject:"Английский язык", icon:"🌍",  source:"ВсОШ (архив по предмету)", weak:true},
+  {subject:"Литература",      icon:"📖",  source:"ВсОШ · Турнир Ломоносова (лингвистика)", weak:true},
+  {subject:"География",       icon:"🗺️",  source:"ВсОШ (архив по предмету)", weak:true}
 ];
 
 const defaultTasks = [
@@ -1290,6 +1268,32 @@ function olympiadCard(item){
         <button class="btn btn-outline btn-small" onclick="showOlympiad(${item.id})">Подробнее</button>
       </div>
     </div>`;
+}
+
+/* ЗАДАНИЯ ПО ПРЕДМЕТАМ */
+function renderMaterials(){
+  const grid = document.getElementById("olympMaterialsGrid");
+  if(!grid) return;
+  const preferred = (state.profile.subjects || []).map(s => s.toLowerCase());
+  const sorted = [...SUBJECT_MATERIALS].sort((a, b) => {
+    const ai = preferred.indexOf(a.subject.toLowerCase());
+    const bi = preferred.indexOf(b.subject.toLowerCase());
+    if (ai === -1 && bi === -1) return 0;
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
+
+  grid.innerHTML = sorted.map(item => `
+    <div class="card material-card">
+      <div class="olympiad-icon">${item.icon}</div>
+      <h3>${escapeHTML(item.subject)}</h3>
+      <p>${escapeHTML(item.source)}</p>
+      ${item.weak
+        ? '<span class="tag orange">Архив ограничен — только ВсОШ</span>'
+        : '<span class="tag green">Архивы доступны</span>'}
+    </div>
+  `).join("");
 }
 
 function renderCatalog(){
@@ -1635,6 +1639,7 @@ function renderAll(){
   renderPlan();
   renderCatalog();
   renderHomeOlympiads();
+  renderMaterials();   /* ← вкладка «Задания» */
   renderCalendar();
   renderAchievements();
   renderUniversities();
